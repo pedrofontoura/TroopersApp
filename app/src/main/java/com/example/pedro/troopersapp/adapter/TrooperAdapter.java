@@ -21,9 +21,11 @@ public class TrooperAdapter
         extends RecyclerView.Adapter<TrooperAdapter.ViewHolder> {
 
     private ArrayList<Trooper> troopers;
+    private View.OnLongClickListener onLongClickListener;
 
-    public TrooperAdapter(ArrayList<Trooper> troopers) {
+    public TrooperAdapter(ArrayList<Trooper> troopers, View.OnLongClickListener onLongClickListener) {
         this.troopers = troopers;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @Override
@@ -53,6 +55,7 @@ public class TrooperAdapter
                 .setVisibility(
                         position == troopers.size() - 1 ?
                                 View.INVISIBLE : View.VISIBLE);
+        holder.itemView.setOnLongClickListener(onLongClickListener);
     }
 
     @Override

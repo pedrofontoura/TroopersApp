@@ -1,7 +1,14 @@
 package com.example.pedro.troopersapp.repository;
 
+import android.content.SharedPreferences;
+
 import com.example.pedro.troopersapp.model.Affiliation;
 import com.example.pedro.troopersapp.model.Trooper;
+import com.example.pedro.troopersapp.util.Constants;
+import com.example.pedro.troopersapp.util.SharedPreferencesUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -24,5 +31,23 @@ public class TrooperRepository {
 
     public static ArrayList<Trooper> getAll() {
         return TROOPERS;
+    }
+
+    public static ArrayList<Trooper> tryGettingFromSharedPreferences(SharedPreferences sharedPreferences) {
+        SharedPreferencesUtil util = new SharedPreferencesUtil(sharedPreferences);
+        Gson gson = new Gson();
+        if (util.hasValue(Constants.TROOPER_LIST)) {
+            String json = util.get(Constants.TROOPER_LIST);
+            return gson.fromJson(json, new TypeToken<ArrayList<Trooper>>() {
+            }.getType());
+        }
+        return getAll();
+    }
+
+    public static void saveToSharedPreferences(ArrayList<Trooper> troopers, SharedPreferences sharedPreferences) {
+        Gson gson = new Gson();
+        SharedPreferencesUtil util = new SharedPreferencesUtil(sharedPreferences);
+        String jsonList = gson.toJson(troopers);
+        util.save(Constants.TROOPER_LIST, jsonList);
     }
 }
